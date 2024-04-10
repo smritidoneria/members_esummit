@@ -5,12 +5,14 @@ const mongoose = require('mongoose');
 const Event1  = require('./models/event1.model');
 const Event2  = require('./models/event2.model');
 const Users  = require('./models/user.model');
+const cors = require("cors");
 
 // Create an Express application
 const app = express();
 
 
 
+app.use(cors())
 // Define a route handler for GET requests
 app.get('/getnumbers', async (req, res) => {
     try {
