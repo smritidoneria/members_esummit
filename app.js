@@ -14,6 +14,8 @@ const app = express();
 // Define a route handler for GET requests
 app.get('/getnumbers', async (req, res) => {
     try {
+        let event1 = 0;
+        let event2 = 0;
         let event3 = 0;
         let event4 = 0;
         let event5 = 0;
@@ -32,6 +34,12 @@ app.get('/getnumbers', async (req, res) => {
         const event2Count = await Event2.find();
         const users = await Users.find();
         users.forEach((user) => {
+            if(user.events.includes(1)){
+                event1++;
+            }
+            if(user.events.includes(2)){
+                event2++;
+            }
             if (user.events.includes(3)) {
                 event3++;
             }
@@ -48,6 +56,7 @@ app.get('/getnumbers', async (req, res) => {
             totalUsers: totalUsers,
             atLeastOneEvent: atleastOneEvent,
             innoventure: {
+                totalParticipants : event1,
                 total: event1Count.length,
                 one: nMembersTeam(event1Count, 1),
                 two: nMembersTeam(event1Count, 2),
@@ -55,6 +64,7 @@ app.get('/getnumbers', async (req, res) => {
                 four: nMembersTeam(event1Count, 4),
             },
             ideathon: {
+                totalParticipants : event2,
                 total: event2Count.length,
                 one: nMembersTeam(event2Count, 1),
                 two: nMembersTeam(event2Count, 2),
