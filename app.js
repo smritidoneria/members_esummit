@@ -6,6 +6,7 @@ const Event1  = require('./models/event1.model');
 const Event2  = require('./models/event2.model');
 const Users  = require('./models/user.model');
 const cors = require("cors");
+const Capacity=require('./models/capcity.model')
 
 // Create an Express application
 const app = express();
@@ -84,6 +85,32 @@ app.get('/getnumbers', async (req, res) => {
         res.status(500).json({ message: `Internal Server Error. ${err.message}` });
     }
 });
+
+
+app.get('/getcapacity', async (req, res) => {
+    try {
+ 
+        const cap = await Capacity.find();
+        const capObj = cap[0];
+        await capObj.save();
+        res.status(200).json(
+          {
+            message: "Capacity fetched successfully.",
+            caps: capObj,
+          },
+         
+        );
+      } catch (err) {
+        console.log(err);
+        res.status(500).json(
+          { message: `Internal Server Error. ${err.message}` },
+    
+        );
+      }
+});
+
+
+
 
 // Function to count teams with n members
 function nMembersTeam(event, n) {
