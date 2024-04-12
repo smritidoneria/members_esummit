@@ -7,6 +7,11 @@ const Event2  = require('./models/event2.model');
 const Users  = require('./models/user.model');
 const cors = require("cors");
 const Capacity=require('./models/capcity.model')
+const multer  = require('multer'); // Middleware for handling file uploads
+const upload = multer({ dest: 'uploads/' }); // Specify the directory where uploaded files will be stored
+const path=require('path');
+const fs = require('fs');
+
 
 // Create an Express application
 const app = express();
@@ -108,6 +113,37 @@ app.get('/getcapacity', async (req, res) => {
         );
       }
 });
+
+
+app.post('/upload', upload.single('file'), (req, res) => {
+    
+    // Move the file to the desired directory
+    const tempPath = req.file.path;
+    const targetPath = path.join(__dirname, 'uploads/' + req.file.originalname);
+  
+    // Move the file
+    fs.rename(tempPath, targetPath, err => {
+      if (err) return res.status(500).send('Could not upload the file');
+  
+      res.send('File uploaded successfully');
+    });
+  });
+
+
+  app.get('/files/:filename', (req, res) => {
+    const fileName = req.params.filename;
+    const filePath = path.join(__dirname, 'uploads/' + fileName);
+    
+    // Check if the file exists
+    if (fs.existsSync(filePath)) {
+        // Send the file to the client
+        res.sendFile(filePath);
+    } else {
+        res.status(404).send('File not found');
+    }
+});
+  
+
 
 
 
